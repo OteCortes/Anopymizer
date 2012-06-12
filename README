@@ -1,0 +1,86 @@
+#### Anonymizer ####
+Anonymize http petitions thru a proxy or a Tor connection.
+This class is to simplify the work with HTTP GET petitions trying to anonymize them as example to get access to 
+APIs with throttle control.
+
+If you configure access to a TOR Control port, autoconfigure fast recicle circuits(60 secs) and request a new one 
+when you prepare a petition after this 60 seconds. With this, the Anonymizer, controls the number of petitions with
+the same IP and launch an AnonymizerException if you try to do more petitions in this time.
+
+#Author
+Angel -Ote- Cortés @OteCortes
+
+#Version
+-0.1: First release
+    -Accepts the use of TOR Control protocol port to request new circuits
+    -Limit the rate of TOR petitions per minute and change the circuit when a petition is done after a minute.
+    -Randomize Accept-Languaje(6) and User-Agent(15) headers.
+
+#TODO
+-Document ExceptionCodes
+-HTTP POST
+-Option to autoremove not available proxies
+-IPv6 support for TOR control protocol
+
+
+#Example Code
+-Using HTTP proxies
+    from anonymizer import Anonymizer
+    test_proxy = {'http':["1.1.1.1:3128","2.2.2.2:3128","3.3.3.3:3128","4.4.4.4:3128","5.5.5.5:3128"]}
+
+    if __name__ == "__main__":
+        anon = Anonymizer(test_proxy)
+        #Normal petition to Google with random HTTP proxy from list
+        res = anon.get("http://www.google.com")
+        #Print Data obtained
+        print(res.text)
+        #Print the cookies send by google
+        print(res.cookies)
+        print("#####################")
+        #PureAnon petition to google with random HTTP proxy from list
+        res = anon.get("http://www.google.com",pureAnon = True)
+        #Print Data obtained
+        print(res.text)
+        #Print the cookies send by google
+        print(res.cookies)
+    
+-Using TOR
+You can call it as a simple HTTP proxy as parameter of the previous example or use the 'tor'
+
+    from anonymizer import Anonymizer
+
+    test_tor = {'tor':"127.0.0.1:8118"}
+
+    if __name__ == "__main__":
+        anon = Anonymizer(test_tor)
+        res = anon.get("http://whatsmyip.net/")
+        #Print Data obtained
+        print(res.text)
+
+-Using TOR with TOR Control port access
+You can configure number of petitions per second(and need to handle it) and a TOR Control port and host to connect and create
+new circuits after this time.
+
+from anonymizer import Anonymizer
+from time import sleep
+
+test_tor = {'tor':"127.0.0.1:8118",'torctl':"127.0.0.1:9051"}
+
+if __name__ == "__main__":
+    anon = Anonymizer(test_tor,passwd="1234",petitions=6)
+    #I will do 10 petitions
+    for i in range(10):
+        try:
+            res = anon.get("http://whatsmyip.net/")
+        except AnonymizerException as e:
+            if e.errorCode == 111:
+                print(e)
+                print("Too much petitions with this IP...sleeping 30 secs")
+                sleep(30)
+            continue
+        print("---->Petition Tor %s"%i)
+        print("---->IP:")
+        print(res.text.split("<title>")[1].split("</title>")[0])
+        print("----------------------------")
+        #(sleep 10 seconds + the petition time) > 60sec/6petitions
+        sleep(10)
