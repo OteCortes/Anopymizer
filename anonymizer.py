@@ -120,17 +120,17 @@ class Anonymizer(object):
         user_agent = choice(user_agents_list).strip() 
 
         ##Language
-        accept_languaje_list = []
-        accept_languaje_list.append('de-de,es-es;q=0.8,en-us;q=0.5,en;q=0.3')
-        accept_languaje_list.append('en-us;q=0.8,en;q=0.3')
-        accept_languaje_list.append('es;q=0.8,en-us;q=0.5,en;q=0.3')
-        accept_languaje_list.append('es-es;q=0.8,en;q=0.3')
-        accept_languaje_list.append('de-de;q=0.8,en;q=0.3')
-        accept_languaje_list.append('de-de;q=0.8,en-us;q=0.5)')
+        accept_language_list = []
+        accept_language_list.append('de-de,es-es;q=0.8,en-us;q=0.5,en;q=0.3')
+        accept_language_list.append('en-us;q=0.8,en;q=0.3')
+        accept_language_list.append('es;q=0.8,en-us;q=0.5,en;q=0.3')
+        accept_language_list.append('es-es;q=0.8,en;q=0.3')
+        accept_language_list.append('de-de;q=0.8,en;q=0.3')
+        accept_language_list.append('de-de;q=0.8,en-us;q=0.5)')
 
-        languaje = choice(accept_languaje_list).strip() 
+        language = choice(accept_language_list).strip() 
 
-        self.request_headers = {'User-Agent': user_agent, 'Accept-Languaje':languaje, 'Referer': ''}
+        self.request_headers = {'User-Agent': user_agent, 'Accept-Language':language, 'Referer': ''}
     
     def __prepare_request(self,url):
         """ 
