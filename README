@@ -1,5 +1,6 @@
 #### Anonymizer ####
 Anonymize http petitions thru a proxy or a Tor connection.
+
 This class is to simplify the work with HTTP GET petitions trying to anonymize them as example to get access to 
 APIs with throttle control.
 
@@ -10,6 +11,9 @@ the same IP and launch an AnonymizerException if you try to do more petitions in
 #Author
 Angel -Ote- Cortés @OteCortes
 
+#Python
+-Tested on 2.7.1(Linux)
+-Tested on 3.2(Windows)
 #Version
 -0.1: First release
     -Accepts the use of TOR Control protocol port to request new circuits
